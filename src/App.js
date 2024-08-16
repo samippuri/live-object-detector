@@ -3,6 +3,7 @@ import './App.css';
 import Webcam from 'react-webcam';
 import * as tf from '@tensorflow/tfjs';
 import * as cocossd from '@tensorflow-models/coco-ssd';
+import {draw} from "./boxUp";
 
 function App() {
   // creating cariables to assign the webcam reference
@@ -12,7 +13,7 @@ function App() {
 
   const main = async () => {
     // loading the model
-    const model = await cocossdd.load()
+    const model = await cocossd.load()
 
     setInterval(() => {
       detect(model);
@@ -38,8 +39,8 @@ function App() {
       webcamRef.current.video.height = vidH;
 
       // setting the canvas properties
-      canvasRef.current.video.width = vidW;
-      canvasRef.current.video.height = vidH;
+      canvasRef.current.width = vidW;
+      canvasRef.current.height = vidH;
 
       // making the detections through the webcam
       const obj = await model.detect(vid);
@@ -52,13 +53,13 @@ function App() {
     }
   }
 
-  useEffect(()=>{runCoco()},[]);
+  useEffect(()=>{main()},[]);
 
   return (
     <div className="App">
       <header className = "App-Header">
         <Webcam 
-        ref={webcam}
+        ref={webcamRef}
         muted={true}
         style={{
             position:'absolute',
@@ -73,7 +74,7 @@ function App() {
         }} 
         />
 
-        <canvas>
+        <canvas
         ref={canvasRef}
           style={{
             position: "absolute",
@@ -86,7 +87,7 @@ function App() {
             width: 640,
             height: 480,   
           }}
-        </canvas>
+          />
       </header>
     </div>
   );
