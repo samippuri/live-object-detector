@@ -5,11 +5,55 @@ import * as tf from '@tensorflow/tfjs';
 import * as cocossd from '@tensorflow-models/coco-ssd';
 
 function App() {
+  // creating cariables to assign the webcam reference
+  // and the canvas reference.
   const webcamRef = useRef(null)
   const canvasRef = useRef(null)
 
+  const main = async () => {
+    // loading the model
+    const model = await cocossdd.load()
 
-  
+    setInterval(() => {
+      detect(model);
+    }, 10);
+  };
+
+  const detect = async (model) => {
+    // checking if webcam is running well in order
+    // to run detections
+    if ( 
+      typeof webcamRef.current !== "undefined" &&
+      webcamRef.current !== null &&
+      // readyState 4 means video is ready to play
+      webcamRef.current.video.readyState === 4
+    ) {
+      // getting the video properties
+      const vid = webcamRef.current.video;
+      const vidW = webcamRef.current.video.videoWidth;
+      const vidH = webcamRef.current.video.videoHeight;
+
+      // setting the video properties
+      webcamRef.current.video.width = vidW;
+      webcamRef.current.video.height = vidH;
+
+      // setting the canvas properties
+      canvasRef.current.video.width = vidW;
+      canvasRef.current.video.height = vidH;
+
+      // making the detections through the webcam
+      const obj = await model.detect(vid);
+
+      // creating object with tools for drawing
+      const ctx = canvasRef.current.getContext("2d");
+      
+      // drawing boxes on and detections made
+      draw(obj, ctx);
+    }
+  }
+
+  useEffect(()=>{runCoco()},[]);
+
   return (
     <div className="App">
       <header className = "App-Header">
