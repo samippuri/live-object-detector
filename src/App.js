@@ -4,6 +4,7 @@ import Webcam from 'react-webcam';
 import * as tf from '@tensorflow/tfjs';
 import * as cocossd from '@tensorflow-models/coco-ssd';
 import {draw} from "./boxUp";
+import PreLoader from "./PreLoader"
 
 function App() {
   // creating cariables to assign the webcam reference
@@ -56,6 +57,9 @@ function App() {
   useEffect(()=>{main()},[]);
 
   return (
+    <>
+    <PreLoader />
+
     <div className="App">
       <header className = "App-Header">
         <Webcam 
@@ -90,6 +94,7 @@ function App() {
           />
       </header>
     </div>
+    </>  
   );
 }
 
